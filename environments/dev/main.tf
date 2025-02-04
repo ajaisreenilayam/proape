@@ -7,32 +7,23 @@ module "vpc" {
   private_subnets    = var.private_subnets
   environment        = var.environment
 }
+
 module "eks" {
   source = "../../modules/eks"
 
-  cluster_name    = var.cluster_name
-  cluster_version = var.cluster_version
-  vpc_id          = module.vpc.vpc_id
-  subnet_ids      = module.vpc.private_subnets
+  cluster_name      = "example-cluster"
+  cluster_role_arn  = "arn:aws:iam::123456789012:role/EKSClusterRole"  # Replace with your actual role ARN
+  node_group_name   = "example-node-group"
+  node_role_arn     = "arn:aws:iam::123456789012:role/EKSNodeRole"     # Replace with your actual role ARN
+  subnet_ids        = module.vpc.private_subnets  # EKS workers in private subnets
+  cluster_version   = "1.30"
+  node_desired_count = 2
+  node_min_count    = 1
+  node_max_count    = 3
 
-  # Managed Node Groups
-  managed_node_groups = {
-    on_demand = {
-      desired_capacity = var.on_demand_desired_capacity
-      max_capacity     = var.on_demand_max_capacity
-      min_capacity     = var.on_demand_min_capacity
-      instance_types   = var.on_demand_instance_types
-      capacity_type    = "ON_DEMAND"
-    }
-    spot = {
-      desired_capacity = var.spot_desired_capacity
-      max_capacity     = var.spot_max_capacity
-      min_capacity     = var.spot_min_capacity
-      instance_types   = var.spot_instance_types
-      capacity_type    = "SPOT"
-    }
-  }
-
-  tags = var.tags
+  # Optional: if your EKS module differentiates between public and private subnets:
+  public_subnets  = module.vpc.public_subnets  # For public resources
+  private_subnets = module.vpc.private_subnets # For private worker nodes
 }
+
 

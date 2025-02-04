@@ -1,21 +1,17 @@
-module "eks" {
-  source          = "terraform-aws-modules/eks/aws"
-  version         = "18.29.0"  # Ensure this is the latest version
-  cluster_name    = var.cluster_name
-  cluster_version = var.cluster_version
-  vpc_id          = var.vpc_id
-  subnet_ids      = var.subnet_ids
+resource "aws_eks_cluster" "this" {
+  name     = var.cluster_name
+  role_arn = var.cluster_role_arn
 
-  # Managed Node Groups
-  managed_node_groups = {
-    spot = {
-      desired_capacity = var.spot_desired_capacity
-      max_capacity     = var.spot_max_capacity
-      min_capacity     = var.spot_min_capacity
-      instance_types   = var.spot_instance_types
-      capacity_type    = "SPOT"
-    }
+  vpc_config {
+    subnet_ids = var.subnet_ids
   }
 
-  tags = var.tags
+  # Optionally, specify cluster version and logging
+  version = var.cluster_version
+
+  # Optional: Enable cluster logging
+  enabled_cluster_log_types = ["api", "audit", "authenticator"]
+
+  # Additional settings if required
 }
+

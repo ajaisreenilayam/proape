@@ -1,45 +1,66 @@
+# Cluster name
 variable "cluster_name" {
-  description = "Name of the EKS cluster"
   type        = string
+  description = "The name of the EKS cluster"
 }
 
-variable "cluster_version" {
-  description = "Kubernetes version for the EKS cluster"
+# Cluster IAM role ARN
+variable "cluster_role_arn" {
   type        = string
-  default     = "1.30"
+  description = "IAM role ARN for the EKS control plane"
 }
 
-variable "vpc_id" {
-  description = "VPC ID where the EKS cluster will be deployed"
+# Node group name
+variable "node_group_name" {
   type        = string
+  description = "The name of the EKS node group"
 }
 
+# Node IAM role ARN
+variable "node_role_arn" {
+  type        = string
+  description = "IAM role ARN for the EKS worker nodes"
+}
+
+# Subnets
 variable "subnet_ids" {
-  description = "List of subnet IDs for the EKS cluster"
   type        = list(string)
+  description = "List of subnet IDs where the EKS cluster and nodes will run"
 }
 
-variable "spot_desired_capacity" {
-  description = "Desired number of Spot worker nodes"
+# Cluster version
+variable "cluster_version" {
+  type        = string
+  description = "The Kubernetes version for the EKS cluster"
+  default     = "1.21"  # You can set a default or leave it up to the caller to provide
+}
+
+# Node group scaling configuration
+variable "node_desired_count" {
   type        = number
+  description = "Desired number of worker nodes"
+  default     = 2
 }
 
-variable "spot_max_capacity" {
-  description = "Maximum number of Spot worker nodes"
+variable "node_min_count" {
   type        = number
+  description = "Minimum number of worker nodes"
+  default     = 1
 }
 
-variable "spot_min_capacity" {
-  description = "Minimum number of Spot worker nodes"
+variable "node_max_count" {
   type        = number
+  description = "Maximum number of worker nodes"
+  default     = 3
 }
 
-variable "spot_instance_types" {
-  description = "List of EC2 instance types for Spot worker nodes"
+variable "public_subnets" {
   type        = list(string)
+  description = "List of public subnet IDs"
 }
 
-variable "tags" {
-  description = "Tags to apply to resources"
-  type        = map(string)
+variable "private_subnets" {
+  type        = list(string)
+  description = "List of private subnet IDs"
 }
+
