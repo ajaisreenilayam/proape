@@ -1,6 +1,6 @@
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "3.14.2"
+  version = "5.15.0"  # Replace with the latest version if newer
 
   name = "proape-vpc"
   cidr = var.vpc_cidr
