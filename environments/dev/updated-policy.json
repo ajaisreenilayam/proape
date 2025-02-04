@@ -1,0 +1,17 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "eks:CreateCluster",
+          "eks:UpdateClusterConfig",
+          "eks:DescribeCluster",
+          "eks:*",
+          "iam:PassRole"
+        ],
+        "Resource": "*"
+      }
+    ]
+  }
+  

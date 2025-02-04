@@ -12,7 +12,7 @@ module "eks" {
   source = "../../modules/eks"
 
   cluster_name      = "example-cluster"
-  cluster_role_arn  = "arn:aws:iam::123456789012:role/EKSClusterRole"  # Replace with your actual role ARN
+  cluster_role_arn = "arn:aws:iam::084375582994:role/EKSClusterRole" 
   node_group_name   = "example-node-group"
   node_role_arn     = "arn:aws:iam::123456789012:role/EKSNodeRole"     # Replace with your actual role ARN
   subnet_ids        = module.vpc.private_subnets  # EKS workers in private subnets
