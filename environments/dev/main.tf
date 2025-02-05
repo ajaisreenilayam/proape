@@ -11,9 +11,9 @@ module "vpc" {
 module "eks" {
   source            = "../../modules/eks"
   
-  cluster_name      = "proape-cluster"
+  cluster_name      =  "${var.cluster_name}-${var.environment}"
   cluster_role_arn  = "arn:aws:iam::084375582994:role/EKSClusterRole"
-  cluster_version   = "1.30"
+  cluster_version   = var.cluster_version
   subnet_ids        = module.vpc.private_subnets  # EKS workers in private subnets
 
   # Define multiple node groups

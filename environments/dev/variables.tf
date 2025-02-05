@@ -28,5 +28,17 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "cluster_name" {
+  description = "Base name for the EKS cluster"
+  type        = string
+  default     = "proape-cluster"
+}
+
+variable "cluster_version" {
+  description = "Base name for the EKS cluster"
+  type        = string
+  default     = "1.30"
+}
+
 
 
