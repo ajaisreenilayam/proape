@@ -9,21 +9,35 @@ module "vpc" {
 }
 
 module "eks" {
-  source = "../../modules/eks"
-
-  cluster_name      = "example-cluster"
-  cluster_role_arn = "arn:aws:iam::084375582994:role/EKSClusterRole" 
-  node_group_name   = "example-node-group"
-  node_role_arn     = "arn:aws:iam::123456789012:role/EKSNodeRole"     # Replace with your actual role ARN
-  subnet_ids        = module.vpc.private_subnets  # EKS workers in private subnets
+  source            = "../../modules/eks"
+  
+  cluster_name      = "proape-cluster"
+  cluster_role_arn  = "arn:aws:iam::084375582994:role/EKSClusterRole"
   cluster_version   = "1.30"
-  node_desired_count = 2
-  node_min_count    = 1
-  node_max_count    = 3
+  subnet_ids        = module.vpc.private_subnets  # EKS workers in private subnets
 
-  # Optional: if your EKS module differentiates between public and private subnets:
-  public_subnets  = module.vpc.public_subnets  # For public resources
-  private_subnets = module.vpc.private_subnets # For private worker nodes
+  # Define multiple node groups
+  node_groups = [
+    {
+      name            = "on-demand-nodes"
+      node_role_arn   = "arn:aws:iam::084375582994:role/EKSNodeRole"
+      
+      instance_types  = ["t3.medium"]
+      capacity_type   = "ON_DEMAND"
+      desired_size    = 1
+      min_size        = 1
+      max_size        = 3
+    },
+    {
+      name            = "spot-nodes"
+      node_role_arn   = "arn:aws:iam::084375582994:role/EKSNodeRole"
+      instance_types  = ["t3.large", "m5.large", "c5.large"]  # Multiple types to increase availability
+      capacity_type   = "SPOT"  # Enables Spot Instances
+      desired_size    = 2
+      min_size        = 1
+      max_size        = 3
+    }
+  ]
 }
 
 
